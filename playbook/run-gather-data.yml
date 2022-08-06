@@ -1,0 +1,7 @@
+---
+- name: Gather data from oracle database playbook 
+  hosts: app
+  gather_facts: yes 
+  roles: 
+    - install_client_oel  #Install oracle client OEL only 
+    - oracle_tasks        #execute database tasks to gather data in csv
