@@ -1,0 +1,5 @@
+---
+oracle_client_package: "oracle-instantclient-release-el{{ ansible_distribution_major_version }}"
+oracle_network_files: "{{ role_path }}/files/"
+oracle_admin_path: /usr/lib/oracle/21/client64/lib/network/network/admin/
+oracle_bin_path: /usr/lib/oracle/21/client64/bin/

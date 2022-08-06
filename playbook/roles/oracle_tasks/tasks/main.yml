@@ -1,0 +1,43 @@
+---
+- name: copy scripts to /tmp/ folder on the application server 
+  become: true
+  become_method: sudo 
+  copy: 
+    src: "{{ item }}"
+    dest: "/tmp/"
+  with_items: "{{ scripts_path }}"
+  register: out_scripts 
+
+- name: Create table random_table and Fetch first 100 rows from it
+  shell: "sqlplus -s {{ db_user }}/{{ db_pass}}@{{ oracle_address }} @{{ item.dest }} "
+  environment:
+      PATH: "{{ path }}:$PATH"
+  register: out_query
+  failed_when: "'ERROR' in out_query.stdout or 'ERROR' in out_query.stderr"
+  with_items: "{{ out_scripts.results }}"
+
+- name: Getting file to the ansible controller node 
+  fetch:
+    src: /tmp/gathered_data.csv
+    dest: /tmp/
+    flat: yes    
+
+- name: remove script files from /tmp/ 
+  become: true
+  become_method: sudo 
+  file:
+    path: "{{ item.dest }}"
+    state: absent 
+  with_items: 
+    - "{{ out_scripts.results }}"
+
+- name: remove .csv file from /tmp/ 
+  become: true
+  become_method: sudo 
+  file:
+    path: /tmp/gathered_data.csv
+    state: absent 
+
+- name: gathered_data csv file generated
+  debug:
+    msg: "File generated on the ansible controller node in the path /tmp/gathered_data.csv"

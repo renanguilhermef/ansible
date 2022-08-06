@@ -1,0 +1,8 @@
+---
+oracle_address: aapldb_high   #Specify TNS ALIAS, Easy Connection or TNS String
+db_user: admin                                    
+db_pass: Renan_123456 
+path: /usr/lib/oracle/21/client64/bin 
+scripts_path: 
+  - "{{ role_path }}/files/createAndPopulateRandomTable.sql"
+  - "{{ role_path }}/files/selectRandomTable.sql"

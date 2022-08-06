@@ -1,0 +1,77 @@
+---
+- name: Checking if client has been installed 
+  shell: |
+         if [ {{ ansible_distribution_major_version }} = "8" ]; then
+            sudo dnf list installed | grep instantclient | awk '{print $1}'
+          else
+            sudo yum list installed | grep instantclient | awk '{print $1}'
+          fi
+  register: out_packages 
+
+- name: Tasks for OEL 8
+  become: true
+  become_method: sudo
+  block:
+  - name: Remove current oracle client packages 
+    dnf:
+      name: "{{ item }}"
+      state: absent 
+      autoremove: yes 
+    with_items: "{{ out_packages.stdout_lines }}"
+    when: out_packages.stdout != ""
+  
+  - name: Install release package, oracle client and sqlplus
+    dnf: 
+      name: "{{ item }}"
+      state: latest
+    with_items: 
+      - "{{ oracle_client_package }}"
+      - "oracle-instantclient-basic" 
+      - "oracle-instantclient-sqlplus"
+  when: ansible_distribution_major_version == "8" 
+
+- name: Tasks for OEL 7
+  become: true
+  become_method: sudo
+  block:
+  - name: Remove current oracle client packages 
+    yum:
+      name: "{{ item }}"
+      state: absent 
+      autoremove: yes 
+    with_items: "{{ out_packages.stdout_lines }}"
+    when: out_packages.stdout != ""
+  
+  - name: Install release package, oracle client and sqlplus
+    yum: 
+      name: "{{ item }}"
+      state: latest
+    with_items: 
+      - "{{ oracle_client_package }}"
+      - "oracle-instantclient-basic" 
+      - "oracle-instantclient-sqlplus"
+  when: ansible_distribution_major_version == "7" 
+
+- name: Create network/admin directory
+  become: true
+  become_method: sudo
+  file:
+    path: "{{ oracle_admin_path }}"
+    state: directory
+    mode: '0751'
+
+- name: Getting network files from source control
+  find:
+    paths: "{{ oracle_network_files }}"
+  register: out_files
+  delegate_to: localhost
+
+- name: Sending oracle network files to the new installed oracle client 
+  become: true
+  become_method: sudo
+  copy:
+    src: "{{ item.path }}"
+    dest: "{{ oracle_admin_path }}"
+    remote_src: no 
+  with_items: 
+    - "{{ out_files.files }}" 

@@ -1,0 +1,7 @@
+---
+- name: Client install and table populate playbook 
+  hosts: app
+  gather_facts: yes 
+  roles: 
+    - install_client_oel
+    - oracle_tasks
