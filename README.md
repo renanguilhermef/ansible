@@ -18,7 +18,7 @@ Clone repository and go to the folder
 
 Change private key permission to connect on the application server
 ```bash
-  chmod 400 inventory/ssh-key-2022-08-05.key
+  chmod 400 inventory/<private_key>.key
 ```
 
 add all your network/admin files to connect on the database with TNS Alias on playbook/roles/install_client_oel/files/
