@@ -1,6 +1,6 @@
 # Requirements
 
-Application server OS : Oracle Enterprise Linux 8 and 7
+Application server OS : Oracle Enterprise Linux 8 or 7
 
 
 Database version: Any 
