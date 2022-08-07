@@ -12,7 +12,7 @@
   become: true
   become_method: sudo
   block:
-  - name: Remove current oracle client packages 
+  - name: Remove current oracle client packages OEL 8
     dnf:
       name: "{{ item }}"
       state: absent 
@@ -20,14 +20,14 @@
     with_items: "{{ out_packages.stdout_lines }}"
     when: out_packages.stdout != ""
   
-  - name: Install release package
+  - name: Install release package OEL 8
     dnf: 
       name: "{{ item }}"
       state: latest
     with_items: 
       - "{{ oracle_client_package }}"
   
-  - name: Install oracle client and sqlplus
+  - name: Install oracle client and sqlplus OEL 8
     dnf: 
       name: "{{ item }}"
       state: latest
@@ -41,7 +41,7 @@
   become: true
   become_method: sudo
   block:
-  - name: Remove current oracle client packages 
+  - name: Remove current oracle client packages OEL 7
     yum:
       name: "{{ item }}"
       state: absent 
@@ -49,14 +49,14 @@
     with_items: "{{ out_packages.stdout_lines }}"
     when: out_packages.stdout != ""
   
-  - name: Install release package
+  - name: Install release package OEL7
     yum: 
       name: "{{ item }}"
       state: latest
     with_items: 
       - "{{ oracle_client_package }}"
 
-  - name: Install oracle client and sqlplus
+  - name: Install oracle client and sqlplus OEL7
     yum: 
       name: "{{ item }}"
       state: latest
