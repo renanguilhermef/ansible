@@ -43,15 +43,20 @@
     when: out_packages.stdout != ""
   
   - name: Install release package, oracle client and sqlplus
-    become: true
-    become_method: sudo
     yum: 
       name: "{{ item }}"
       state: latest
     with_items: 
       - "{{ oracle_client_package }}"
+
+  - name: Install oracle client and sqlplus
+    yum: 
+      name: "{{ item }}"
+      state: latest
+    with_items: 
       - "oracle-instantclient-basic" 
       - "oracle-instantclient-sqlplus"
+
   when: ansible_distribution_major_version == "7" 
 
 - name: Create network/admin directory
