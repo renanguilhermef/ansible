@@ -20,14 +20,21 @@
     with_items: "{{ out_packages.stdout_lines }}"
     when: out_packages.stdout != ""
   
-  - name: Install release package, oracle client and sqlplus
+  - name: Install release package
     dnf: 
       name: "{{ item }}"
       state: latest
     with_items: 
       - "{{ oracle_client_package }}"
+  
+  - name: Install oracle client and sqlplus
+    dnf: 
+      name: "{{ item }}"
+      state: latest
+    with_items: 
       - "oracle-instantclient-basic" 
       - "oracle-instantclient-sqlplus"
+
   when: ansible_distribution_major_version == "8" 
 
 - name: Tasks for OEL 7
@@ -42,7 +49,7 @@
     with_items: "{{ out_packages.stdout_lines }}"
     when: out_packages.stdout != ""
   
-  - name: Install release package, oracle client and sqlplus
+  - name: Install release package
     yum: 
       name: "{{ item }}"
       state: latest
