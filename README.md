@@ -10,9 +10,10 @@ Ansible controller server OS: Any
 
 # Steps
 
-Clone repository
+Clone repository and go to the folder
 ```bash
   git clone https://github.com/renanguilhermef/ansible.git
+  cd ansible
 ```
 
 Change private key permission to connect on the application server
@@ -31,5 +32,4 @@ Modify playbook/roles/oracle_tasks/defaults/main.yml if you wish to change conne
 ```
 execute ansible playbook
 ```bash
-  cd ansible
   ansible-playbook -i inventory/hosts.ini playbook/run-gather-data.yml
